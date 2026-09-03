@@ -1,0 +1,36 @@
+name: Ubuntu 24.04 + ngrok
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check Ubuntu
+        run: |
+          lsb_release -a
+          uname -a
+
+      - name: Install ngrok
+        run: |
+          curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+            | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+
+          echo "deb https://ngrok-agent.s3.amazonaws.com bookworm main" \
+            | sudo tee /etc/apt/sources.list.d/ngrok.list
+
+          sudo apt update
+          sudo apt install -y ngrok
+
+      - name: Authenticate ngrok
+        env:
+          NGROK_AUTHTOKEN: ${{3HnX31aRMtErL8lSUhreZu7M8zI_7pnWo33aw8mkVLhUywJgn}}
+        run: |
+          ngrok config add-authtoken "$NGROK_AUTHTOKEN"
+
+      - name: Verify ngrok
+        run: |
+          ngrok config check
+          ngrok version
