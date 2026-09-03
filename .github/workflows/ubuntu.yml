@@ -1,0 +1,23 @@
+name: Ubuntu 24.04 Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check Ubuntu version
+        run: |
+          echo "OS:"
+          lsb_release -a
+          echo
+          echo "Kernel:"
+          uname -a
+
+      - name: Check installed tools
+        run: |
+          which curl
+          which wget
+          which python3
